@@ -8,6 +8,7 @@ mod vectors; // No need to give print.rs file name during compilation
 mod conditionals; // No need to give print.rs file name during compilation
 mod loops; // No need to give print.rs file name during compilation
 mod functions; // No need to give print.rs file name during compilation
+mod pointer_ref; // No need to give print.rs file name during compilation
 
 fn main() {
     print::run();
@@ -20,4 +21,5 @@ fn main() {
     conditionals::run();
     loops::run();
     functions::run();
+    pointer_ref::run();
 }
