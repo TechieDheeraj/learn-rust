@@ -7,6 +7,7 @@ mod arrays; // No need to give print.rs file name during compilation
 mod vectors; // No need to give print.rs file name during compilation
 mod conditionals; // No need to give print.rs file name during compilation
 mod loops; // No need to give print.rs file name during compilation
+mod functions; // No need to give print.rs file name during compilation
 
 fn main() {
     print::run();
@@ -18,4 +19,5 @@ fn main() {
     vectors::run();
     conditionals::run();
     loops::run();
+    functions::run();
 }
