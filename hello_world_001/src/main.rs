@@ -4,6 +4,7 @@ mod types; // No need to give print.rs file name during compilation
 mod strings; // No need to give print.rs file name during compilation
 mod tuples; // No need to give print.rs file name during compilation
 mod arrays; // No need to give print.rs file name during compilation
+mod vectors; // No need to give print.rs file name during compilation
 
 fn main() {
     print::run();
@@ -12,4 +13,5 @@ fn main() {
     strings::run();
     tuples::run();
     arrays::run();
+    vectors::run();
 }
