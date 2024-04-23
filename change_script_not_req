@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+cd ~/code/rust
+cargo new $1 --bin
+mv ~/code/rust/$1/src/main.rs ~/code/rust/$1/src/$1.rs
+echo "" >> ~/code/rust/$1/cargo.toml
+echo "[[bin]]" >> ~/code/rust/$1/cargo.toml
+echo "name = \"$1\"" >> ~/code/rust/$1/cargo.toml
+echo "path = \"src/$1.rs\"" >> ~/code/rust/$1/cargo.toml
