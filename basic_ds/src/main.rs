@@ -1,5 +1,44 @@
+use std::io;
+use std::env;
+use rand::prelude::*;
+use std::fs;
+use std::io::prelude::*;
+
 struct S {
     x: i32,
+}
+
+struct Color(u8, u8, u8);
+struct Point(u8, u8, u8);
+
+fn get_y(p: Point) -> u8 {
+    p.1
+}
+
+#[derive(Debug)]
+#[derive(Clone)]
+struct Shuttle {
+    name: String,
+    crew_size: u8,
+    propellant: f64
+}
+
+impl Shuttle {
+    fn get_name(&self) -> &str {
+        &self.name
+    }
+
+    fn add_fuel(&mut self, gallons: f64) {
+        self.propellant += gallons;
+    }
+
+    fn new(name: &str) -> Shuttle {
+        Shuttle {
+            name: String::from(name),
+            crew_size: 7,
+            propellant: 0.0
+        }
+    }
 }
 
 const S:S = S{x:2};
@@ -96,7 +135,47 @@ fn explain_ownership(mut test_var: i32, test_str: String, new_str: &mut String) 
     test_str
 }
 
+fn explain_slice(s: &str) -> &str {
+    let input = String::from("Hello World !");
+    let slice_var = &input[6..6+3];
+    println!("slice var is {}", slice_var);
+
+    let planets = [1, 2, 3, 4, 5, 6, 7, 8];
+    let inner_planets : &[i32] = &planets[..4];
+    println!("inner planets are: {:?}", inner_planets);
+
+    let bytes = s.as_bytes();
+    for (index, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[..index];
+        }
+    }
+    return &s;
+}
+
+fn take_input() {
+    let mut buffer = String::new();
+    println!("Enter the message");
+    io::stdin().read_line(&mut buffer);
+    println!("buffer is {}", buffer);
+
+    let number :i32 = buffer.trim().parse().unwrap();
+    println!("number is {}", number);
+}
+
 fn main() {
+    if env::args().len() <= 2 {
+        println!("program requires atleast 2 arguments.");
+        return;
+    }
+
+    for (index, argument) in env::args().enumerate() {
+        println!("index {}, argument is {}", index, argument);
+    }
+
+    let arg2 = env::args().nth(2).unwrap(); 
+    println!("2nd argument is {}", arg2);
+
     let mut x: u8 = 254;
     x +=1;
     let fl: f64 = 10.22;
@@ -156,4 +235,66 @@ fn main() {
     // We can have as many as unmutable references to a variable
     let t_string = explain_ownership(t_var, t_string, &mut new_str);
     println!("t_var is {} and t_string is {}, new_str is {}", t_var, t_string, new_str);
+    let input_st = String::from("Hello world, how are you ?");
+    let first_word = explain_slice(&input_st[..10]); // slice can accept both slice and string inside explain_slice func
+    println!("first word is {}", first_word);
+    take_input();
+
+    let number  = random::<f64>();
+    let guess = thread_rng().gen_range(1..11);
+    println!("number is {}, guess is {}", number, guess);
+
+    let file_read = fs::read_to_string("src/input.txt").unwrap(); 
+    println!("contents is {}", file_read);
+
+    for line in file_read.lines() {
+        println!("line is {}", line);
+    }
+    let file_read = fs::read("src/input.txt").unwrap(); 
+    println!("contents is {:?}", file_read);
+
+    let mut speech = String::new();
+    speech.push_str("We choose to go to moon this decade\n");
+    speech.push_str("Is there any challenge in that ?\n");
+
+    fs::write("src/speech.txt", speech);
+
+    let mut file = fs::OpenOptions::new().append(true).open("src/input.txt").unwrap();
+    file.write(b"\nTony");
+
+    let mut vehicle = Shuttle {
+        name: String::from("Endaevour"),
+        crew_size: 7,
+        propellant: 83599.0
+    };
+
+    println!("shuttle name is {}", vehicle.name);
+    println!("vehicle object is {:?}", vehicle);
+
+    // Move from existing object apart from name
+    // If first object vehicle tries to modify the string which stores on heap
+    // will get error as the ownership is changed
+    let vehicle2 = Shuttle {
+        ..vehicle.clone()
+    };
+    vehicle.crew_size = 7; // this can be updated since the fixed size is on the stack
+    // Moved ownership to vehicle2 object (use clone to overcome this)
+    // println!("vehicle object is {:?}", vehicle);
+    println!("vehicle object is {:?}", vehicle);
+    println!("vehicle2 object is {:?}", vehicle2);
+
+    let vehicle_name = vehicle.get_name();
+    println!("vehicle name is {}", vehicle_name);
+    vehicle.add_fuel(1000.0);
+    println!("new propellent is {}", vehicle.propellant);
+
+    let vehicle3 = Shuttle::new("Ford");
+    println!("new vehicle3 is {:?}", vehicle3);
+
+    let red = Color(255,0,0);
+    let coord = Point(1,2,3);
+
+    let y = get_y(coord);
+    println!("y is {}", y);
+
 }
